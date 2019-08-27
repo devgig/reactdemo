@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {BrowserRouter as Router, Route, Link} from "react-router-dom";
 import {
     Collapse,
     Navbar,
@@ -15,6 +16,7 @@ import {
 } from 'reactstrap';
 import logo from './car-icon.png';
 import './App.css';
+import FileUpload from './components/Fileupload';
 
 class App extends Component {
     constructor(props) {
@@ -35,31 +37,40 @@ class App extends Component {
     render() {
         return (
             <div>
-                <Navbar color="inverse" light expand="md">
-                    <NavbarBrand href="/">Tura</NavbarBrand>
-                    <NavbarToggler onClick={this.toggle}/>
-                    <Collapse isOpen={this.state.isOpen} navbar>
-                        <Nav className="ml-auto" navbar>
-                            <NavItem>
-                                <NavLink href="/components/fileupload">Upload File</NavLink>
-                            </NavItem>
-                        </Nav>
-                    </Collapse>
-                </Navbar>
-                <Jumbotron>
-                    <Container>
-                        <Row>
-                            <Col>
-                                <h3>Request a vehicle to rent</h3>
-                            </Col>
-                        </Row>
-                    </Container>
-                </Jumbotron>
-                
-                <img src={logo} className="App-logo" alt="logo" />
+                <Router>
+                    <Navbar color="inverse" light expand="md">
+                        <NavbarBrand href="/">Tura</NavbarBrand>
+                        <NavbarToggler onClick={this.toggle}/>
+                        <Collapse isOpen={this.state.isOpen} navbar>
+                            <Nav className="ml-auto" navbar>
+                                <NavItem>
+                                    <NavLink href="/fileupload">Upload File</NavLink>
+                                </NavItem>
+                            </Nav>
+                        </Collapse>
+                    </Navbar>
+                    <Route exact path="/" component={Home}/>
+                    <Route path="/fileupload" component={FileUpload}/>
+                </Router>
+                <img src={logo} className="App-logo" alt="logo"/>
             </div>
+
         );
     }
+}
+
+function Home() {
+    return (
+        <Jumbotron>
+            <Container>
+                <Row>
+                    <Col>
+                        <h3>Request a vehicle to rent</h3>
+                    </Col>
+                </Row>
+            </Container>
+        </Jumbotron>
+    );
 }
 
 export default App;
