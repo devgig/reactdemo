@@ -14,7 +14,6 @@ import {
     Button
 } from 'reactstrap';
 
-
 class Fileupload extends PureComponent {
     constructor(props) {
         super(props);
@@ -40,8 +39,12 @@ class Fileupload extends PureComponent {
                         <Col>
                             <div class="box content">
                                 <div>
-                                    <form // action="/api/images/upload"
-                                        class="dropzone needsclick dz-clickable" id="image-upload" method="post" enctype="multipart/form">
+                                    <form
+                                        action="/api/images/upload"
+                                        class="dropzone needsclick dz-clickable"
+                                        id="image-upload"
+                                        method="post"
+                                        enctype="multipart/form">
 
                                         <div class="dz-message needsclick">
                                             <span class="note needsclick">
