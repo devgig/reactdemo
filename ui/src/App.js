@@ -16,7 +16,7 @@ import {
 } from 'reactstrap';
 import logo from './car-icon.png';
 import './App.css';
-import FileUpload from './components/Fileupload';
+import Rentals from './components/Rentals/Rentals';
 
 class App extends Component {
     constructor(props) {
@@ -44,13 +44,13 @@ class App extends Component {
                         <Collapse isOpen={this.state.isOpen} navbar>
                             <Nav className="ml-auto" navbar>
                                 <NavItem>
-                                    <NavLink href="/fileupload">Upload File</NavLink>
+                                    <NavLink href="/rentals">Rentals</NavLink>
                                 </NavItem>
                             </Nav>
                         </Collapse>
                     </Navbar>
                     <Route exact path="/" component={Home}/>
-                    <Route path="/fileupload" component={FileUpload}/>
+                    <Route path="/rentals" component={Rentals}/>
                 </Router>
                 <img src={logo} className="App-logo" alt="logo"/>
             </div>
