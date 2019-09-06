@@ -17,6 +17,7 @@ import {
 import logo from './car-icon.png';
 import './App.css';
 import Rentals from './components/Rentals/Rentals';
+import { userInfo } from 'os';
 
 class App extends Component {
     constructor(props) {
@@ -26,7 +27,9 @@ class App extends Component {
             .toggle
             .bind(this);
         this.state = {
-            isOpen: false
+            isOpen: false,
+            userName: null,
+            userPwd: null
         };
     }
     toggle() {
@@ -60,13 +63,22 @@ class App extends Component {
 }
 
 function Home() {
+    const {userName, userPwd} = this.state;
     return (
         <Jumbotron>
             <Container>
                 <Row>
-                    <Col>
-                        <h3>Request a vehicle to rent</h3>
+                    <Col colSpan='2'>
+                        <h3>Login</h3>
                     </Col>
+                </Row>
+                <Row>
+                    <Col>User Name</Col>
+                    <Col><input value={userName}></input></Col>
+                </Row>
+                <Row>
+                    <Col>Password</Col>
+                    <Col><input value={userPwd}></input></Col>
                 </Row>
             </Container>
         </Jumbotron>
