@@ -1,24 +1,23 @@
 import React, { Component } from "react";
 import { Jumbotron, Container, Row, Col } from "reactstrap";
+import { Link } from "react-router-dom";
 
 class Home extends Component {
   render() {
+    const { isAuthenticated, login } = this.props.auth;
     return (
       <div>
         <Jumbotron>
           <Container>
             <Row>
-              <Col colSpan="2">
-                <h3>Login</h3>
-              </Col>
+              <h2>Home</h2>
             </Row>
             <Row>
-              <Col>User Name</Col>
-              <Col>{/* <input value={userName}></input> */}</Col>
-            </Row>
-            <Row>
-              <Col>Password</Col>
-              <Col>{/* <input value={userPwd}></input> */}</Col>
+              {isAuthenticated() ? (
+                <Link to="/profile">View Profile</Link>
+              ) : (
+                <></>
+              )}
             </Row>
           </Container>
         </Jumbotron>
