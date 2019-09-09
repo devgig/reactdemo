@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { NavLink} from "react-router-dom";
+
 import {
   Navbar,
   NavItem,
@@ -6,12 +8,13 @@ import {
   NavbarToggler,
   Collapse,
   Nav,
-  NavLink
+  NavLink as RRNavLink,
 } from "reactstrap";
 
 class AppNav extends Component {
   constructor(props) {
     super(props);
+    this.history = this.props.history;
     this.toggle = this.toggle.bind(this);
     this.handleClick = this.handleClick.bind(this);
 
@@ -38,33 +41,75 @@ class AppNav extends Component {
     return (
       <div>
         <Navbar color="inverse" light expand="md">
-          <NavbarBrand href="/">Tura</NavbarBrand>
+            <NavLink 
+            className="navbar-brand"
+            activeClassName="active"
+            tag={NavbarBrand}
+              to='/'
+            >
+              Tura
+            </NavLink>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
               <NavItem>
-                <NavLink href="/profile">Profile</NavLink>
+                <NavLink
+                  to="/profile"
+                  className="nav-link"
+                  activeClassName="active"
+                  tag={RRNavLink}
+                >
+                  Profile
+                </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="/public">Public</NavLink>
+                <NavLink
+                  to="/public"
+                  className="nav-link"
+                  activeClassName="active"
+                  tag={RRNavLink}
+                >
+                  Public
+                </NavLink>
               </NavItem>
               {isAuthenticated() && (
                 <NavItem>
-                  <NavLink href="/rental">Rentals</NavLink>
+                  <NavLink
+                    to="/rental"
+                    className="nav-link"
+                    activeClassName="active"
+                    tag={RRNavLink}
+                  >
+                    Rentals
+                  </NavLink>
                 </NavItem>
               )}
               {isAuthenticated() && userHasScopes(["read:courses"]) && (
                 <NavItem>
-                  <NavLink href="/courses">Courses</NavLink>
+                  <NavLink
+                    to="/courses"
+                    className="nav-link"
+                    activeClassName="active"
+                    tag={RRNavLink}
+                  >
+                    Courses
+                  </NavLink>
                 </NavItem>
               )}
               <NavItem>
-                <NavLink href="/private">Private</NavLink>
+                <NavLink
+                  to="/private"
+                  className="nav-link"
+                  activeClassName="active"
+                  tag={RRNavLink}
+                >
+                  Private
+                </NavLink>
               </NavItem>
               <NavItem>
-                <NavLink href="#" onClick={this.handleClick}>
+                <RRNavLink href="#" onClick={this.handleClick}>
                   {isAuthenticated() ? "Logout" : "Login"}
-                </NavLink>
+                </RRNavLink>
               </NavItem>
             </Nav>
           </Collapse>
