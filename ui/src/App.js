@@ -11,71 +11,62 @@ import Callback from "./Callback";
 import Public from "./Public";
 import Private from "./Private";
 import Courses from "./Courses";
+import AuthContext from "./AuthContext";
+import PrivateRoute from "./PrivateRoute";
 
 class App extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      auth: new Auth(this.props.history),
+      tokenRenewalComplete: false
+    };
+  }
 
-    this.auth = new Auth(this.props.history);
+  componentDidMount() {
+    this.state.auth.renewToken(() =>
+      this.setState({ tokenRenewalComplete: true })
+    );
   }
 
   render() {
-    const { isAuthenticated, login } = this.auth;
+    const { auth } = this.state;
+    // Show loading message until the token renewal check is completed.
+    if (!this.state.tokenRenewalComplete) return "Loading...";
     return (
-      <>
-        <AppNav auth={this.auth} />
-        <Route
-          exact
-          path="/"
-          render={props => <Home auth={this.auth} {...props} />}
-        />
-        <Route
-          path="/callback"
-          render={props => <Callback auth={this.auth} {...props} />}
-        />
-        <Route
-          path="/profile"
-          render={props =>
-            isAuthenticated() ? (
-              <Profile auth={this.auth} {...props} />
-            ) : (
-              <Redirect to="/" />
-            )
-          }
-        />
-        <Route
-          path="/rental"
-          reander={props =>
-            isAuthenticated() ? (
-              <Rental auth={this.auth} {...props} />
-            ) : (
-              <Redirect to="/" />
-            )
-          }
-        />
-        <Route path="/public" component={Public} />
-        <Route
-          path="/private"
-          render={props =>
-            isAuthenticated() ? (
-              <Private auth={this.auth} {...props} />
-            ) : (
-              login()
-            )
-          }
-        />
-        <Route
-          path="/courses"
-          render={props =>
-            isAuthenticated() && this.auth.userHasScopes(["read:courses"]) ? (
-              <Courses auth={this.auth} {...props} />
-            ) : (
-              login()
-            )
-          }
-        />
-        <img src={logo} className="App-logo" alt="logo" />
-      </>
+      <AuthContext.Provider value={auth}>
+        <AppNav auth={auth} />
+        <div>
+          <Route
+            exact
+            path="/"
+            render={props => <Home auth={auth} {...props} />}
+          />
+          <Route
+            path="/callback"
+            render={props => <Callback auth={auth} {...props} />}
+          />
+          <PrivateRoute
+            path="/profile"
+            component={Profile}
+          />
+          <PrivateRoute
+            path="/rental"
+            component={Rental}
+          />
+          <Route path="/public" component={Public} />
+          <PrivateRoute
+            path="/private"
+            component={Private}
+          />
+          <PrivateRoute
+            path="/courses"
+            component={Courses}
+            scopes={["read:courses"]}
+          />
+          <img src={logo} className="App-logo" alt="logo" />
+        </div>
+      </AuthContext.Provider>
     );
   }
 }

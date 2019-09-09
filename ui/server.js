@@ -10,7 +10,7 @@ const checkJwt = jwt({
   secret: jwksRsa.expressJwtSecret({
     cache: true, // cache the signing key
     rateLimit: true,
-    jwksRequestsPerMinute: 5, // prevent attackers from requesting more than 5 per minute
+    jwksRequestsPerMinute: 10, // prevent attackers from requesting more than 5 per minute
     jwksUri: `https://${
       process.env.REACT_APP_AUTH0_DOMAIN
     }/.well-known/jwks.json`
