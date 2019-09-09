@@ -8,6 +8,9 @@ import AppNav from "./components/AppNav";
 import Rental from "./components/Rental";
 import Auth from "./auth/Auth";
 import Callback from "./Callback";
+import Public from "./Public";
+import Private from "./Private";
+import Courses from "./Courses";
 
 class App extends Component {
   constructor(props) {
@@ -17,7 +20,7 @@ class App extends Component {
   }
 
   render() {
-    const { isAuthenticated } = this.auth;
+    const { isAuthenticated, login } = this.auth;
     return (
       <>
         <AppNav auth={this.auth} />
@@ -47,6 +50,27 @@ class App extends Component {
               <Rental auth={this.auth} {...props} />
             ) : (
               <Redirect to="/" />
+            )
+          }
+        />
+        <Route path="/public" component={Public} />
+        <Route
+          path="/private"
+          render={props =>
+            isAuthenticated() ? (
+              <Private auth={this.auth} {...props} />
+            ) : (
+              login()
+            )
+          }
+        />
+        <Route
+          path="/courses"
+          render={props =>
+            isAuthenticated() && this.auth.userHasScopes(["read:courses"]) ? (
+              <Courses auth={this.auth} {...props} />
+            ) : (
+              login()
             )
           }
         />
