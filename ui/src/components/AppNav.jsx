@@ -17,6 +17,7 @@ class AppNav extends Component {
     this.history = this.props.history;
     this.toggle = this.toggle.bind(this);
     this.handleClick = this.handleClick.bind(this);
+    this.handleNavItemClick = this.handleNavItemClick.bind(this);
 
     this.state = {
       isOpen: false
@@ -27,6 +28,11 @@ class AppNav extends Component {
     this.setState({
       isOpen: !this.state.isOpen
     });
+  }
+
+  handleNavItemClick() {
+    if(this.state.isOpen)
+      this.setState({ isOpen : false});
   }
 
   handleClick = e => {
@@ -58,6 +64,7 @@ class AppNav extends Component {
                   className="nav-link"
                   activeClassName="active"
                   tag={RRNavLink}
+                  onClick={this.handleNavItemClick}
                 >
                   Profile
                 </NavLink>
@@ -68,6 +75,7 @@ class AppNav extends Component {
                   className="nav-link"
                   activeClassName="active"
                   tag={RRNavLink}
+                  onClick={this.handleNavItemClick}
                 >
                   Public
                 </NavLink>
@@ -79,6 +87,7 @@ class AppNav extends Component {
                     className="nav-link"
                     activeClassName="active"
                     tag={RRNavLink}
+                    onClick={this.handleNavItemClick}
                   >
                     Rentals
                   </NavLink>
@@ -91,6 +100,7 @@ class AppNav extends Component {
                     className="nav-link"
                     activeClassName="active"
                     tag={RRNavLink}
+                    onClick={this.handleNavItemClick}
                   >
                     Courses
                   </NavLink>
@@ -102,6 +112,7 @@ class AppNav extends Component {
                   className="nav-link"
                   activeClassName="active"
                   tag={RRNavLink}
+                  onClick={this.handleNavItemClick}
                 >
                   Private
                 </NavLink>
