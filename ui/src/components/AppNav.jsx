@@ -43,7 +43,7 @@ class AppNav extends Component {
   };
 
   render() {
-    const { isAuthenticated, userHasScopes } = this.props.auth;
+    const { isAuthenticated, userHasClaims } = this.props.auth;
     return (
       <div>
         <Navbar color="inverse" light expand="md">
@@ -93,7 +93,7 @@ class AppNav extends Component {
                   </NavLink>
                 </NavItem>
               )}
-              {isAuthenticated() && userHasScopes(["read:courses"]) && (
+              {isAuthenticated() && userHasClaims(["read:rental"]) && (
                 <NavItem>
                   <NavLink
                     to="/courses"

@@ -3,7 +3,7 @@ import { Route } from "react-router-dom";
 import PropTypes from "prop-types";
 import AuthContext from "./AuthContext";
 
-function PrivateRoute({ component: Component, scopes, ...rest }) {
+function PrivateRoute({ component: Component, claims, ...rest }) {
   return (
     <AuthContext.Consumer>
       {auth => (
@@ -14,11 +14,11 @@ function PrivateRoute({ component: Component, scopes, ...rest }) {
             if (!auth.isAuthenticated()) return auth.login();
 
             // 2. Display message if user lacks required scope(s).
-            if (scopes.length > 0 && !auth.userHasScopes(scopes)) {
+            if (claims.length > 0 && !auth.userHasClaims(claims)) {
               return (
                 <h1>
-                  Unauthorized - You need the following scope(s) to view this
-                  page: {scopes.join(",")}.
+                  Unauthorized - You need the following claims(s) to view this
+                  page: {claims.join(",")}.
                 </h1>
               );
             }
@@ -34,11 +34,11 @@ function PrivateRoute({ component: Component, scopes, ...rest }) {
 
 PrivateRoute.propTypes = {
   component: PropTypes.func.isRequired,
-  scopes: PropTypes.array
+  claims: PropTypes.array
 };
 
 PrivateRoute.defaultProps = {
-  scopes: []
+  claims: []
 };
 
 export default PrivateRoute;

@@ -62,7 +62,7 @@ class App extends Component {
           <PrivateRoute
             path="/courses"
             component={Courses}
-            scopes={["read:courses"]}
+            claims={["read:courses"]}
           />
           <img src={logo} className="App-logo" alt="logo" />
         </div>
