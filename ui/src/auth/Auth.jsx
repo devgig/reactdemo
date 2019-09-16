@@ -15,13 +15,13 @@ export default class Auth {
   constructor(history) {
     this.history = history;
     this.userProfile = null;
-    this.requestedScopes = "openid profile email";
     this.auth0 = new auth0.WebAuth({
       domain: process.env.REACT_APP_AUTH0_DOMAIN,
       clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
       redirectUri: process.env.REACT_APP_AUTH0_CALLBACK_URL,
       audience: process.env.REACT_APP_AUTH0_AUDIENCE,
       responseType: "token id_token",
+      scope: "openid profile email"
     });
   }
 
@@ -54,14 +54,19 @@ export default class Auth {
   };
 
   getApplicationClaims = authResult => {
-        axios.get("https://localhost:44326/api/auth").then(response => {
+    let accessToken = this.getAccessToken();
+        axios.get("https://localhost:44326/api/auth", {
+          headers: new Headers({
+            "Authorization": `Bearer ${accessToken}`,
+            'Content-Type': 'application/json;charset=UTF-8',
+            "Access-Control-Allow-Origin": "*",
+          })}).then(response => {
           if (response.status == 200) return response.data;
           throw new Error("Network response was not ok.");
         })
         .then(response => {
 
           var decodedValue = response["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-
           localStorage.setItem(CLAIMS, decodedValue || "");
         })
         .catch(err => {
@@ -70,6 +75,30 @@ export default class Auth {
           console.log(err);
         } );
   }
+
+  // getApplicationClaims = authResult => {
+
+  //   const accessToken = this.getAccessToken();
+
+  //   fetch("/api/auth", {headers: new Headers({
+  //     "Accept": "application/json",
+  //     "Authorization": `Bearer ${accessToken}`
+  //     })})
+  //     .then(response => {
+  //       if (response.status == 200) return response.json();
+  //       throw new Error("Network response was not ok.");
+  //     })
+  //     .then(claims => {
+  //       let text = JSON.parse(claims);
+  //       let decodedValue =  text["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+  //       localStorage.setItem(CLAIMS, decodedValue || "");
+  //     })
+  //     .catch(err => {
+  //       this.history.push("/");
+  //       alert(`Error: ${err.error}. Claims request failed.`);
+  //       console.log(err);
+  //     });
+  // }
 
   setSession = authResult => {
     console.log(authResult);
@@ -99,7 +128,7 @@ export default class Auth {
   };
 
   getAccessToken = () => {
-    let accessToken = localStorage.getItem(ACCESS_TOKEN);
+    const accessToken = localStorage.getItem(ACCESS_TOKEN);
     if (!accessToken) {
       throw new Error("No access token found.");
     }
