@@ -80,7 +80,7 @@ class AppNav extends Component {
                   Public
                 </NavLink>
               </NavItem>
-              {isAuthenticated() && (
+              {isAuthenticated() && userHasClaims(["read:rental"]) && (
                 <NavItem>
                   <NavLink
                     to="/rental"
@@ -93,7 +93,7 @@ class AppNav extends Component {
                   </NavLink>
                 </NavItem>
               )}
-              {isAuthenticated() && userHasClaims(["read:rental"]) && (
+              {isAuthenticated() && userHasClaims(["read:courses"]) && (
                 <NavItem>
                   <NavLink
                     to="/courses"

@@ -1,6 +1,6 @@
 import auth0 from "auth0-js";
-import axios from 'axios';
-import Base64 from 'js-base64';
+import axios from "axios";
+import Base64 from "js-base64";
 
 const REDIRECT_ON_LOGIN = "redirect_on_login";
 
@@ -53,44 +53,29 @@ export default class Auth {
     });
   };
 
-  getApplicationClaims = authResult => {
-    let accessToken = this.getAccessToken();
-        axios.get("https://localhost:44326/api/auth", {
-          headers: new Headers({
-            "Authorization": `Bearer ${accessToken}`,
-            'Content-Type': 'application/json;charset=UTF-8',
-            "Access-Control-Allow-Origin": "*",
-          })}).then(response => {
-          if (response.status == 200) return response.data;
-          throw new Error("Network response was not ok.");
-        })
-        .then(response => {
-
-          var decodedValue = response["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
-          localStorage.setItem(CLAIMS, decodedValue || "");
-        })
-        .catch(err => {
-          this.history.push("/");
-          alert(`Error: ${err.error}. Claims request failed.`);
-          console.log(err);
-        } );
-  }
-
   // getApplicationClaims = authResult => {
+  //   let accessToken = this.getAccessToken();
+  //   axios.defaults.headers.post["Content-Type"] =
+  //     "application/x-www-form-urlencoded";
+  //   axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
+  //   axios.defaults.headers.post["Access-Control-Allow-Headers"] =
+  //     "Origin, X-Requested-With, Content-Type, Accept";
+  //   axios.defaults.headers.post["Authorization"] = `Bearer ${accessToken}`;
 
-  //   const accessToken = this.getAccessToken();
-
-  //   fetch("/api/auth", {headers: new Headers({
-  //     "Accept": "application/json",
-  //     "Authorization": `Bearer ${accessToken}`
-  //     })})
+  //   axios
+  //     .create({
+  //       baseURL: "https://localhost:5001"
+  //     })
+  //     .get("/api/auth")
   //     .then(response => {
-  //       if (response.status == 200) return response.json();
+  //       if (response.status == 200) return response.data;
   //       throw new Error("Network response was not ok.");
   //     })
-  //     .then(claims => {
-  //       let text = JSON.parse(claims);
-  //       let decodedValue =  text["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+  //     .then(response => {
+  //       var decodedValue =
+  //         response[
+  //           "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
+  //         ];
   //       localStorage.setItem(CLAIMS, decodedValue || "");
   //     })
   //     .catch(err => {
@@ -98,7 +83,33 @@ export default class Auth {
   //       alert(`Error: ${err.error}. Claims request failed.`);
   //       console.log(err);
   //     });
-  // }
+  // };
+
+  getApplicationClaims = authResult => {
+    const accessToken = this.getAccessToken();
+
+    fetch("/api/auth", {
+      headers: new Headers({
+        Accept: "application/json",
+        Authorization: `Bearer ${accessToken}`
+      })
+    })
+      .then(response => {
+        if (response.status == 200) return response.json();
+        throw new Error("Network response was not ok.");
+      })
+      .then(claims => {
+        let text = JSON.parse(claims);
+        let decodedValue =
+          text["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+        localStorage.setItem(CLAIMS, decodedValue || "");
+      })
+      .catch(err => {
+        this.history.push("/");
+        alert(`Error: ${err.error}. Claims request failed.`);
+        console.log(err);
+      });
+  };
 
   setSession = authResult => {
     console.log(authResult);
@@ -120,7 +131,8 @@ export default class Auth {
     localStorage.removeItem(ACCESS_TOKEN);
     localStorage.removeItem(EXPIRES_AT);
     localStorage.removeItem(CLAIMS);
-    
+    localStorage.removeItem(ID_TOKEN);
+
     this.auth0.logout({
       clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
       returnTo: "http://localhost:3000"
@@ -135,7 +147,6 @@ export default class Auth {
     return accessToken;
   };
 
-
   getProfile = cb => {
     if (this.userProfile) return cb(this.userProfile);
     this.auth0.client.userInfo(this.getAccessToken(), (err, profile) => {
@@ -145,9 +156,9 @@ export default class Auth {
   };
 
   userHasClaims = claims => {
-    const grantedScopes = (localStorage.getItem(CLAIMS) || []);
+    const grantedScopes = localStorage.getItem(CLAIMS) || [];
     return claims.every(claim => grantedScopes.includes(claim));
-  }
+  };
 
   renewToken(cb) {
     this.auth0.checkSession({}, (err, result) => {

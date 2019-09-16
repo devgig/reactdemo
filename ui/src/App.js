@@ -46,19 +46,14 @@ class App extends Component {
             path="/callback"
             render={props => <Callback auth={auth} {...props} />}
           />
-          <PrivateRoute
-            path="/profile"
-            component={Profile}
-          />
+          <PrivateRoute path="/profile" component={Profile} />
           <PrivateRoute
             path="/rental"
             component={Rental}
+            claims={["read:rental"]}
           />
           <Route path="/public" component={Public} />
-          <PrivateRoute
-            path="/private"
-            component={Private}
-          />
+          <PrivateRoute path="/private" component={Private} />
           <PrivateRoute
             path="/courses"
             component={Courses}
