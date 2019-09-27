@@ -50,7 +50,6 @@ class App extends Component {
           <PrivateRoute
             path="/rental"
             component={Rental}
-            claims={["read:rental"]}
           />
           <Route path="/public" component={Public} />
           <PrivateRoute path="/private" component={Private} />

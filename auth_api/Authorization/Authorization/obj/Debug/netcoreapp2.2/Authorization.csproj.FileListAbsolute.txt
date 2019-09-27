@@ -1,0 +1,14 @@
+C:\Repository\reactdemo\auth_api\Authorization\Authorization\bin\Debug\netcoreapp2.2\Authorization.deps.json
+C:\Repository\reactdemo\auth_api\Authorization\Authorization\bin\Debug\netcoreapp2.2\Authorization.runtimeconfig.json
+C:\Repository\reactdemo\auth_api\Authorization\Authorization\bin\Debug\netcoreapp2.2\Authorization.runtimeconfig.dev.json
+C:\Repository\reactdemo\auth_api\Authorization\Authorization\bin\Debug\netcoreapp2.2\Authorization.dll
+C:\Repository\reactdemo\auth_api\Authorization\Authorization\bin\Debug\netcoreapp2.2\Authorization.pdb
+C:\Repository\reactdemo\auth_api\Authorization\Authorization\obj\Debug\netcoreapp2.2\Authorization.csprojAssemblyReference.cache
+C:\Repository\reactdemo\auth_api\Authorization\Authorization\obj\Debug\netcoreapp2.2\Authorization.RazorAssemblyInfo.cache
+C:\Repository\reactdemo\auth_api\Authorization\Authorization\obj\Debug\netcoreapp2.2\Authorization.RazorAssemblyInfo.cs
+C:\Repository\reactdemo\auth_api\Authorization\Authorization\obj\Debug\netcoreapp2.2\Authorization.AssemblyInfoInputs.cache
+C:\Repository\reactdemo\auth_api\Authorization\Authorization\obj\Debug\netcoreapp2.2\Authorization.AssemblyInfo.cs
+C:\Repository\reactdemo\auth_api\Authorization\Authorization\obj\Debug\netcoreapp2.2\Authorization.RazorTargetAssemblyInfo.cache
+C:\Repository\reactdemo\auth_api\Authorization\Authorization\obj\Debug\netcoreapp2.2\Authorization.dll
+C:\Repository\reactdemo\auth_api\Authorization\Authorization\obj\Debug\netcoreapp2.2\Authorization.pdb
+C:\Repository\reactdemo\auth_api\Authorization\Authorization\obj\Debug\netcoreapp2.2\Authorization.csproj.CoreCompileInputs.cache

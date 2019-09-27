@@ -80,7 +80,7 @@ class AppNav extends Component {
                   Public
                 </NavLink>
               </NavItem>
-              {isAuthenticated() && userHasClaims(["read:rental"]) && (
+              {isAuthenticated() && (
                 <NavItem>
                   <NavLink
                     to="/rental"

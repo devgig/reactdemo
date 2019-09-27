@@ -53,38 +53,7 @@ export default class Auth {
     });
   };
 
-  // getApplicationClaims = authResult => {
-  //   let accessToken = this.getAccessToken();
-  //   axios.defaults.headers.post["Content-Type"] =
-  //     "application/x-www-form-urlencoded";
-  //   axios.defaults.headers.post["Access-Control-Allow-Origin"] = "*";
-  //   axios.defaults.headers.post["Access-Control-Allow-Headers"] =
-  //     "Origin, X-Requested-With, Content-Type, Accept";
-  //   axios.defaults.headers.post["Authorization"] = `Bearer ${accessToken}`;
-
-  //   axios
-  //     .create({
-  //       baseURL: "https://localhost:5001"
-  //     })
-  //     .get("/api/auth")
-  //     .then(response => {
-  //       if (response.status == 200) return response.data;
-  //       throw new Error("Network response was not ok.");
-  //     })
-  //     .then(response => {
-  //       var decodedValue =
-  //         response[
-  //           "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
-  //         ];
-  //       localStorage.setItem(CLAIMS, decodedValue || "");
-  //     })
-  //     .catch(err => {
-  //       this.history.push("/");
-  //       alert(`Error: ${err.error}. Claims request failed.`);
-  //       console.log(err);
-  //     });
-  // };
-
+  
   getApplicationClaims = authResult => {
     const accessToken = this.getAccessToken();
 
@@ -96,7 +65,7 @@ export default class Auth {
     })
       .then(response => {
         if (response.status == 200) return response.json();
-        throw new Error("Network response was not ok.");
+        // throw new Error("Network response was not ok.");
       })
       .then(claims => {
         let text = JSON.parse(claims);
@@ -106,7 +75,7 @@ export default class Auth {
       })
       .catch(err => {
         this.history.push("/");
-        alert(`Error: ${err.error}. Claims request failed.`);
+        // alert(`Error: ${err.error}. Claims request failed.`);
         console.log(err);
       });
   };

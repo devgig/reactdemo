@@ -1,11 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
-import {
-    Jumbotron,
-    Container,
-    Row,
-    Col
-} from 'reactstrap';
+import { Jumbotron, Container, Row, Col } from "reactstrap";
 
 class Rental extends Component {
   constructor(props) {
@@ -20,26 +15,44 @@ class Rental extends Component {
   }
 
   componentDidMount = () => {
-    axios
-      .get("https://localhost:5001/api/v1/Rental/GetAll")
-      .then(result => {
-        this.setState({ isLoaded: true, makes: result.data });
+    const accessToken = this.props.auth.getAccessToken();
+
+    fetch("/api/v1/rental/getall", {
+      headers: new Headers({
+        Accept: "application/json",
+        Authorization: `Bearer ${accessToken}`
+      })
+    })
+      .then(response => {
+        if (response.status == 200) return response.json();
+      })
+      .then(data => {
+        this.setState({ isLoaded: true, makes: data });
       })
       .catch(error => {
-        this.setState({ isLoaded: true, error });
+        this.setState(error);
+        console.log(error.message);
       });
   };
 
   handleMakeChange = event => {
-    axios
-      .get(
-        `https://localhost:5001/api/v1/Rental/GetByCriteria/${event.target.value}`
-      )
-      .then(result => {
-        this.setState({ models: result.data });
+    const accessToken = this.props.auth.getAccessToken();
+
+    fetch(`api/v1/rental/getbycriteria/${event.target.value}`, {
+      headers: new Headers({
+        Accept: "application/json",
+        Authorization: `Bearer ${accessToken}`
+      })
+    })
+      .then(response => {
+        if (response.status == 200) return response.json();
+      })
+      .then(data => {
+        this.setState({ isLoaded: true, models: data });
       })
       .catch(error => {
         this.setState(error);
+        console.log(error);
       });
   };
 
@@ -64,38 +77,38 @@ class Rental extends Component {
           <Container>
             <Row>
               <Col>
-              <span>
-              <label>Make</label>
-                <select
-                  style={selectStyle}
-                  className="form-control"
-                  id="showMake"
-                  onChange={this.handleMakeChange}
-                >
-                  {makes.map(item => (
-                    <option key={item.id} value={item.make}>
-                      {item.make}
-                    </option>
-                  ))}
-                </select>
+                <span>
+                  <label>Make</label>
+                  <select
+                    style={selectStyle}
+                    className="form-control"
+                    id="showMake"
+                    onChange={this.handleMakeChange}
+                  >
+                    {makes.map(item => (
+                      <option key={item.id} value={item.make}>
+                        {item.make}
+                      </option>
+                    ))}
+                  </select>
                 </span>
               </Col>
             </Row>
             <Row>
               <Col>
-              <span>
-              <label>Model</label>
-                <select
-                  style={selectStyle}
-                  className="form-control"
-                  id="showModel"
-                >
-                  {models.map(item => (
-                    <option key={item.id} value={item.make}>
-                      {item.model}
-                    </option>
-                  ))}
-                </select>
+                <span>
+                  <label>Model</label>
+                  <select
+                    style={selectStyle}
+                    className="form-control"
+                    id="showModel"
+                  >
+                    {models.map(item => (
+                      <option key={item.id} value={item.make}>
+                        {item.model}
+                      </option>
+                    ))}
+                  </select>
                 </span>
               </Col>
             </Row>
