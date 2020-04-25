@@ -47,7 +47,7 @@ The following will not display the Link if the User is not Authenticated and the
 
 The following will verify if Authenticated and if the logged in User has the at least one of the identified Claims.
 
-````
+```
   <PrivateRoute
             path="/courses"
             component={Courses}
@@ -67,6 +67,7 @@ import { axiosinstance } from "../auth/Auth";
 ### dotnet API
 
 Add the following in `ConfigureServices(IServiceCollection services)` in `Startup.cs`.
+
 ```
   services.AddAuthentication(options =>
             {
@@ -79,10 +80,10 @@ Add the following in `ConfigureServices(IServiceCollection services)` in `Startu
             });
 
 ```
+
 Add the following to `Configure(IApplicationBuilder app, IHostingEnvironment env)` in `Startup.cs`.
 
 ```
 app.UseAuthentication();
 
 ```
-````
