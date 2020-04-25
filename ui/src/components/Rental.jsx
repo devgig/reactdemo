@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import axios from "axios";
+import { axiosInstance } from "../auth/Auth";
 import { Jumbotron, Container, Row, Col } from "reactstrap";
 
 class Rental extends Component {
@@ -10,47 +10,37 @@ class Rental extends Component {
       error: null,
       isLoaded: false,
       makes: [],
-      models: []
+      models: [],
     };
   }
 
   componentDidMount = () => {
-    const accessToken = this.props.auth.getAccessToken();
-
-    fetch("/api/v1/rental/getall", {
-      headers: new Headers({
-        Accept: "application/json",
-        Authorization: `Bearer ${accessToken}`
+    axiosInstance
+      .get(`${process.env.REACT_API}/api/v1/rental/getall`)
+      .then((response) => {
+        if (response.status === 200) return response.json();
       })
-    })
-      .then(response => {
-        if (response.status == 200) return response.json();
-      })
-      .then(data => {
+      .then((data) => {
         this.setState({ isLoaded: true, makes: data });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState(error);
         console.log(error.message);
       });
   };
 
-  handleMakeChange = event => {
-    const accessToken = this.props.auth.getAccessToken();
-
-    fetch(`api/v1/rental/getbycriteria/${event.target.value}`, {
-      headers: new Headers({
-        Accept: "application/json",
-        Authorization: `Bearer ${accessToken}`
+  handleMakeChange = (event) => {
+    axiosInstance
+      .get(
+        `${process.env.REACT_API}/api/v1/rental/getbycriteria/${event.target.value}`
+      )
+      .then((response) => {
+        if (response.status === 200) return response.json();
       })
-    })
-      .then(response => {
-        if (response.status == 200) return response.json();
-      })
-      .then(data => {
+      .then((data) => {
         this.setState({ isLoaded: true, models: data });
       })
-      .catch(error => {
+      .catch((error) => {
         this.setState(error);
         console.log(error);
       });
@@ -59,11 +49,11 @@ class Rental extends Component {
   render() {
     const divStyle = {
       margin: "10px",
-      color: "red"
+      color: "red",
     };
 
     const selectStyle = {
-      width: "500px"
+      width: "500px",
     };
 
     const { error, isLoaded, makes, models } = this.state;
@@ -85,7 +75,7 @@ class Rental extends Component {
                     id="showMake"
                     onChange={this.handleMakeChange}
                   >
-                    {makes.map(item => (
+                    {makes.map((item) => (
                       <option key={item.id} value={item.make}>
                         {item.make}
                       </option>
@@ -103,7 +93,7 @@ class Rental extends Component {
                     className="form-control"
                     id="showModel"
                   >
-                    {models.map(item => (
+                    {models.map((item) => (
                       <option key={item.id} value={item.make}>
                         {item.model}
                       </option>

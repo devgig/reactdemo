@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import { Jumbotron, Container, Row, Col } from "reactstrap";
+import { Jumbotron, Container, Row } from "reactstrap";
 import { Link } from "react-router-dom";
 
 class Home extends Component {
   render() {
-    const { isAuthenticated, login } = this.props.auth;
+    const { isAuthenticated } = this.props.auth;
     return (
       <div>
         <Jumbotron>

@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { NavLink} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 import {
   Navbar,
   NavItem,
-  NavbarBrand,
   NavbarToggler,
   Collapse,
   Nav,
@@ -20,22 +19,21 @@ class AppNav extends Component {
     this.handleNavItemClick = this.handleNavItemClick.bind(this);
 
     this.state = {
-      isOpen: false
+      isOpen: false,
     };
   }
 
   toggle() {
     this.setState({
-      isOpen: !this.state.isOpen
+      isOpen: !this.state.isOpen,
     });
   }
 
   handleNavItemClick() {
-    if(this.state.isOpen)
-      this.setState({ isOpen : false});
+    if (this.state.isOpen) this.setState({ isOpen: false });
   }
 
-  handleClick = e => {
+  handleClick = (e) => {
     e.preventDefault();
     const { isAuthenticated, login, logout } = this.props.auth;
     if (isAuthenticated()) logout();
@@ -47,14 +45,9 @@ class AppNav extends Component {
     return (
       <div>
         <Navbar color="inverse" light expand="md">
-            <NavLink 
-            className="navbar-brand"
-            activeClassName="active"
-            tag={NavbarBrand}
-              to='/'
-            >
-              Tura
-            </NavLink>
+          <NavLink className="navbar-brand" to="/">
+            Tura
+          </NavLink>
           <NavbarToggler onClick={this.toggle} />
           <Collapse isOpen={this.state.isOpen} navbar>
             <Nav className="ml-auto" navbar>
@@ -62,8 +55,6 @@ class AppNav extends Component {
                 <NavLink
                   to="/profile"
                   className="nav-link"
-                  activeClassName="active"
-                  tag={RRNavLink}
                   onClick={this.handleNavItemClick}
                 >
                   Profile
@@ -73,8 +64,6 @@ class AppNav extends Component {
                 <NavLink
                   to="/public"
                   className="nav-link"
-                  activeClassName="active"
-                  tag={RRNavLink}
                   onClick={this.handleNavItemClick}
                 >
                   Public
@@ -85,8 +74,6 @@ class AppNav extends Component {
                   <NavLink
                     to="/rental"
                     className="nav-link"
-                    activeClassName="active"
-                    tag={RRNavLink}
                     onClick={this.handleNavItemClick}
                   >
                     Rentals
@@ -98,8 +85,6 @@ class AppNav extends Component {
                   <NavLink
                     to="/courses"
                     className="nav-link"
-                    activeClassName="active"
-                    tag={RRNavLink}
                     onClick={this.handleNavItemClick}
                   >
                     Courses
@@ -110,8 +95,6 @@ class AppNav extends Component {
                 <NavLink
                   to="/private"
                   className="nav-link"
-                  activeClassName="active"
-                  tag={RRNavLink}
                   onClick={this.handleNavItemClick}
                 >
                   Private

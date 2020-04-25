@@ -1,6 +1,5 @@
 import auth0 from "auth0-js";
 import axios from "axios";
-import Base64 from "js-base64";
 
 const REDIRECT_ON_LOGIN = "redirect_on_login";
 
@@ -10,6 +9,8 @@ const ID_TOKEN = "id_token";
 const ACCESS_TOKEN = "access_token";
 const EXPIRES_AT = "expiresAt";
 const CLAIMS = "claims";
+
+export const axiosInstance = axios.create();
 
 export default class Auth {
   constructor(history) {
@@ -21,9 +22,76 @@ export default class Auth {
       redirectUri: process.env.REACT_APP_AUTH0_CALLBACK_URL,
       audience: process.env.REACT_APP_AUTH0_AUDIENCE,
       responseType: "token id_token",
-      scope: "openid profile email"
+      scope: "openid profile email",
     });
+    this.init();
   }
+
+  requestInterceptor = null;
+  responseInterceptor = null;
+
+  requestHandler = (request) => {
+    const data = this.getSecureHeader();
+    //add security headers
+    for (let key in data) request.headers[key] = data[key];
+    return request;
+  };
+
+  requestErrorHandler = (err) => {
+    this.handleError(err);
+    return Promise.reject({ ...err });
+  };
+
+  responseErrorHandler = (err) => {
+    this.handleError(err);
+    //handle unauthorized by trying to log in again
+    if ([401].indexOf(err.response?.status) !== -1) this.login();
+    return Promise.reject({ ...err });
+  };
+
+  responseHandler = (response) => {
+    //handle unathorized by trying to log in again.
+    if ([401].indexOf(response?.status) !== -1) this.login();
+    return response;
+  };
+
+  init = () => {
+    if (this.responseInterceptor)
+      this.axiosInstance.interceptors.response.eject(this.responseInterceptor);
+    if (this.requestInterceptor)
+      this.axiosInstance.interceptors.request.eject(this.requestInterceptor);
+
+    this.requestInterceptor = axiosInstance.interceptors.request.use(
+      (request) => this.requestHandler(request),
+      (error) => this.requestErrorHandler(error)
+    );
+
+    this.responseInterceptor = axiosInstance.interceptors.response.use(
+      (response) => this.responseHandler(response),
+      (error) => this.responseErrorHandler(error)
+    );
+  };
+
+  getSecureHeader = () => {
+    const token = this.getAccessToken();
+    if (!token || typeof token === "undefined") {
+      this.login();
+      return;
+    }
+    return {
+      Authorization: `Bearer ${token}`,
+      "x-correlation-id": this.createUUID(),
+    };
+  };
+
+  CreateUUID = () => {
+    return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
+      (
+        c ^
+        (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
+      ).toString(16)
+    );
+  };
 
   login = () => {
     localStorage.setItem(
@@ -53,34 +121,33 @@ export default class Auth {
     });
   };
 
-  
-  getApplicationClaims = authResult => {
+  getApplicationClaims = (authResult) => {
     const accessToken = this.getAccessToken();
 
-    fetch("/api/auth", {
+    fetch(`${process.env.REACT_API}/api/auth`, {
       headers: new Headers({
         Accept: "application/json",
-        Authorization: `Bearer ${accessToken}`
-      })
+        Authorization: `Bearer ${accessToken}`,
+      }),
     })
-      .then(response => {
-        if (response.status == 200) return response.json();
+      .then((response) => {
+        if (response.status === 200) return response.json();
         // throw new Error("Network response was not ok.");
       })
-      .then(claims => {
+      .then((claims) => {
         let text = JSON.parse(claims);
         let decodedValue =
           text["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
         localStorage.setItem(CLAIMS, decodedValue || "");
       })
-      .catch(err => {
+      .catch((err) => {
         this.history.push("/");
         // alert(`Error: ${err.error}. Claims request failed.`);
         console.log(err);
       });
   };
 
-  setSession = authResult => {
+  setSession = (authResult) => {
     console.log(authResult);
     // set the time that the access token will expire
     let expiresAt = authResult.expiresIn * 1000 + new Date().getTime();
@@ -104,7 +171,7 @@ export default class Auth {
 
     this.auth0.logout({
       clientID: process.env.REACT_APP_AUTH0_CLIENT_ID,
-      returnTo: "http://localhost:3000"
+      returnTo: "http://localhost:3000",
     });
   };
 
@@ -116,7 +183,7 @@ export default class Auth {
     return accessToken;
   };
 
-  getProfile = cb => {
+  getProfile = (cb) => {
     if (this.userProfile) return cb(this.userProfile);
     this.auth0.client.userInfo(this.getAccessToken(), (err, profile) => {
       if (profile) this.userProfile = profile;
@@ -124,9 +191,9 @@ export default class Auth {
     });
   };
 
-  userHasClaims = claims => {
+  userHasClaims = (claims) => {
     const grantedScopes = localStorage.getItem(CLAIMS) || [];
-    return claims.every(claim => grantedScopes.includes(claim));
+    return claims.every((claim) => grantedScopes.includes(claim));
   };
 
   renewToken(cb) {

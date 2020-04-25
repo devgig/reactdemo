@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Jumbotron, Container, Row, Col } from "reactstrap";
+import { Jumbotron, Container, Row } from "reactstrap";
 
 class Profile extends Component {
   state = {
