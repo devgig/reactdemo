@@ -5,7 +5,7 @@
   "dependencies": {
     "auth0-js": "^9.13.2",
     "auth0-lock": "^11.23.1",
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bootstrap": "^4.4.1",
     "express": "^4.17.1",
     "express-jwt": "^5.3.3",
