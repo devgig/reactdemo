@@ -7,7 +7,7 @@
     "auth0-lock": "^11.23.1",
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "express-jwt": "^5.3.3",
     "express-jwt-authz": "^1.0.0",
     "js-base64": "^2.5.2",
